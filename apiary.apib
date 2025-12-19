@@ -1,0 +1,814 @@
+FORMAT: 1A
+HOST: https://localhost:8081/
+
+# 成分管理API
+
+## このドキュメントの見方
+このドキュメントに定義されているAPIは下記の分類で構成されています。
+- 原材料管理API
+- 半完成品管理API
+- 完成品管理API
+- マスター管理API
+
+## Headerについて
+このAPIは認証トークンが必要です。各APIには次のようにヘッダにトークンを設定します。
+```
+Authorization: Bearer {token}
+Content-Type: (application/json)
+```
+
+## Responseについて
+Response BodyはJSONオブジェクトとして次の形式で戻ります。
+```
+単一データの場合
+{
+    "status" : "Success",
+    "field1" : "データ１",
+    "field2" : "データ２",
+}
+```
+```
+複数件の場合
+{
+    "status" : "Success" ,
+    "records" : 2,
+    "item": [
+        {
+            "field1" : "データ１１",
+            "field2" : "データ１２",
+        },
+        {
+            "field1":"データ２１",
+            "field2":"データ２２",
+        }
+    ]
+}
+```
+
+# Data Structures
+
+## Test (object)
+
+* status (string,required) - success
++ id (number , required) - 0
+
+## RawMaterial (object)
+
++ foodId (number , required) - 原材料ID（内部キー）
++ foodNo (string , required) - 原材料番号
++ originalFoodGroupId (number , optional ) - 参照元原材料ID
++ originalFoodNo (string , optional) - 参照元原材料番号
++ originalIntexNo (string , optional) - 参照元索引番号
++ foodName (string , required) - 原材料名
++ foodFukuBunrui (string , optional) - 副分類
++ foodRuiKubun (string , optional) - 類分類
++ foodDaiBunrui (string , optional) - 大分類
++ foodCyuBunrui (string , optional) - 中分類
++ foodSyoBunrui (string , optional) - 小分類
++ foodSaibun (string , optional) - 細分
++ originalFoodName (string , optional) - 参照元原材料名
++ categoryId (number , required) - 1:８訂成分データ、2:拡張成分データ、3:ユーザ定義成分データ
++ hashtag (string , optional) - ハッシュタグ
++ supplier_id (number , optional) - 仕入れ元ID
++ purchase_price (number , optional) - 仕入れ単価
++ volume_amount (number , optional) - 仕入れ容量(gかmlで入力) 
++ weight_or_capacity (number , optional) - 0:重さ(g) 1:容量(ml)
++ convertRatio (number , optional) - 重さ/容量 1:100g/100ml ......
++ composite_raw_materials_kb (number , optional) - 複合原材料フラグ 0:通常 1:複合原材料(中間加工原料)
++ price_per_unit (number , optional) - 100グラム単価
++ maker_id (number , optional) - 製造元
++ saller_id (number , optional) - 販売元
++ composite_raw_itemlist (string , optional) - 原材料表記用の記載 ex.マヨネーズ（卵、食用植物油脂、醸造酢、香辛料、食塩、砂糖） 当該複合原材料の原材料が３種類以上ある場合は、当該複合原材料の原材料に占める重量の割合の高い順が３位以下であって、かつ、当該割合が５％未満である原材料については「その他」とまとめて表示することができます。 複合原材料の省略規定として 複合原材料の製品の原材料に占める重量の割合が５％未満であるとき。と、複合原材料の名称からその原材料が明らかなとき（ex.鶏唐揚げとかサバ味噌煮などの主要原材料が明示）　(ex.ミートボール、魚介エキス、植物性たんぱく加水分解物等の主要原材料を総称名称の場合)　(ロースハムやマヨネーズなどJAS規格、食品表示基準別表第３などで定義されている場合)　(その他一般に原材料が明らかである場合、ex.かまぼこ、がんもどき、ハンバーグ等)
++ display_name (string , optional) - 品目表示名
++ place_of_origin (string , optional) - 原産国名 （複合原材料の原料原産地表示について、生鮮原材料の原産地まで遡って表示する場合、複合原材料の原材料に占める重量割合が最も高い原材料（複合原材料の重量割合上位１位の原材料）の原産地の表示が必要です。） 
++ display_place_of_origin (string , optional) - 表示用原料原産地
++ revision_of_food_no (number , optional) - 同一foodNoでのリビジョン 0:-........
++ next_food_id (number , optional) - 次のfood_id
++ expire_date (string , optional) - 利用有効期限リミット
++ create_date (string , optional) - 登録日時
++ last_update_date (string , optional) - 更新日時
++ status (number , optional) - レコード状態 0:本登録 1:仮登録 2:新規利用不可
++ update_information (string , optional) - 更新履歴：ex 単価変更とか、成分変更とか容量変更などのメモを記載
++ refuse (number , optional) - 廃棄率(%)
++ refuse_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ enerc (number ,optional) - エネルギー(kJ)
++ enerc_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ enerc_kcal (number , optional) - エネルギー(kcal)
++ enerc_kcal_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ water (number , optional) - 水分(g)
++ water_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ protcaa (number , optional) - タンパク質 アミノ酸組成によるたんぱく質(g)
++ protcaa_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ prot (number , optional) - タンパク質(g)
++ prot_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ fatnlea (number , optional) - 脂肪酸のトリアシルグリセロール当量(g)
++ fatnlea_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ chole (number , optional) - コレステロール(mg)
++ chole_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ fat (number , optional) - 脂質(g)
++ fat_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ choavlm (number , optional) - 利用可能炭水化物：単糖当量(g)
++ choavlm_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ choavlm_mark (boolean , optional) - カロリー計算に炭水化物量（単糖当量）を用いたなら1それ以外は0
++ choavl (number , optional) - 利用可能炭水化物：質量計(g)
++ choavl_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ choavldf (number , optional) - 差引き法による利用可能炭水化物(g)
++ choavldf_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ choavldf_mark (boolean , optional) - カロリー計算に差引き法の利用可能炭水化物量を用いたなら1それ以外は0
++ fib (number , optional) - 植物繊維総量(g)
++ fib_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ polyl (number , optional) - 糖アルコール(g)
++ polyl_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ chocdf (number , optional) - 炭水化物(g)
++ chocdf_flag (number , optional) - フラグ(0:実測値, 1:推定値, 2:実測Tr, 3:推定Tr, 4:実測-, 5:推定-)
++ oa (number , optional) - 有機酸(g)
++ oa_flag (number , optional) - フラグ(0:実測値, 1:推定値, 2:実測Tr, 3:推定Tr, 4:実測-, 5:推定-)
++ ash (number , optional) - 灰分(g)
++ ash_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ na (number , optional) - ナトリウム(mg)
++ na_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ k (number , optional) - カリウム(mg)
++ k_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ ca (number , optional) - カルシウム(mg)
++ ca_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ mg (number , optional) - マグネシウム(mg)
++ mg_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ p (number , optional) - リン(mg)
++ p_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ fe (number , optional) - 鉄(mg)
++ fe_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ zn (number , optional) - 亜鉛(mg)
++ zn_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ cu (number , optional) - 銅(mg)
++ cu_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ mn (number , optional) - マンガン(mg)
++ mn_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ id (number , optional) - ヨウ素(μg)
++ id_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ se (number , optional) - セレン(μg)
++ se_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ cr (number , optional) - クロム(mg)
++ cr_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ mo (number , optional) - モリブデン(mg)
++ mo_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ ret (number , optional) - レチノール(μg)
++ ret_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ carta (number , optional) - αカロテン(μg)
++ carta_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ cartb (number , optional) - βカロテン(μg)
++ cartb_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ crypxb (number , optional) - βクリプトキサンチン(μg)
++ crypxb_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ cartbeq (number , optional) - βカロテン当量(μg)
++ cartbeq_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ vita_rae (number , optional) - レチノール活性当量(μg)
++ vita_rae_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ vitd (number , optional) - ビタミンD(μg)
++ vitd_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ tocpha (number , optional) - αトコフェロール(mg)
++ tocpha_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ tocphb (number , optional) - βトコフェロール(mg)
++ tocphb_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ tocphg (number , optional) - γトコフェロール(mg)
++ tocphg_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ tocphd (number , optional) - δトコフェロール(mg)
++ tocphd_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ vitk (number , optional) - ビタミンK(μg)
++ vitk_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ thia (number , optional) - ビタミンB1(mg)
++ thia_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ ribf (number , optional) - ビタミンB2(mg)
++ ribf_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ nia (number , optional) - ナイアシン(mg)
++ nia_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ niac (number , optional) - ナイアシン当量(mg)
++ niac_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ vitb6a (number , optional) - ビタミンB6(mg)
++ vitb6a_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ vitb12 (number , optional) - ビタミンB12(μg)
++ vitb12_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ fol (number , optional) - 葉酸(μg)
++ fol_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ pantac (number , optional) - パントテン酸(mg)
++ pantac_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ biot (number , optional) - ビオチン(μg)
++ biot_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ vitc (number , optional) - ビタミンC(mg)
++ vitc_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ alc (number , optional) - アルコール(エタノール)(g)
++ alc_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ nacl_eq (number , optional) - 食塩相当量(g)
++ nacl_eq_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ description (string , optional) - 説明
++ description_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
++ is_active (boolean , optional) - アクティブフラグ
+
+## RawMaterials (array[RawMaterial]
++ (RawMaterial) - 原材料オブジェクトのリスト
+
+## 原材料管理API [/apix/FoodRawMaterial/]
+原材料に関わるAPIを定義します。
+
+### 原材料リスト取得 [GET /apix/FoodRawMaterial/GetDataX{?pattern_id}]
+原材料リスト（JSON形式）を取得するメソッド。パラメータによりデータの種別を指定して取得することができる。
+
++ Request
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Parameters
+    + pattern_id (required,number) ... 検索対象指定（1:８訂原材料一覧, 2:拡張原材料一覧, 3:ユーザ定義原材料一覧）
+
++ Response 200 (application/json)
+    + Attributes 
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + records (number,required) - 取得したデータ件数 レコード無しは0
+        + item (RawMaterials,optional) - 原材料データの配列
+
+```json
+{
+  "status": "Success"
+  "records": 1
+  "item": [
+    {
+      "foodId": 1,
+      "foodNo": "1001",
+      "originalFoodId": 1,
+      "originalFoodGroupId": 1,
+      "originalFoodNo": "1001",
+      "originalIndexNo": "0001",
+      "foodName": "アマランサス　玄穀",
+      "foodFukuBunrui": "",
+      "foodRuiKubun": "",
+      "foodDaiBunrui": "アマランサス",
+      "foodCyuBunrui": "",
+      "foodSyoBunrui": "玄穀",
+      "foodSaibun": "",
+      "originalFoodName": "アマランサス　玄穀",
+      "categoryId": 1,
+      "hashtag": null,
+      "supplierId": null,
+      "purchasePrice": 0,
+      "volumeAmount": 0,
+      "weightOrCapacity": 0,
+      "convertRatio": 1,
+      "compositeRawMaterialsKb": 0,
+      "pricePerUnit": 0,
+      "makerId": null,
+      "makerName": null,
+      "sallerId": null,
+      "sallerName": null,
+      "compositeRawItemlist": null,
+      "displayName": null,
+      "placeOfOrigin": null,
+      "displayPlaceOfOrigin": null,
+      "revisionOfFoodNo": 0,
+      "nextFoodId": null,
+      "expireDate": null,
+      "createDate": "2025-08-27T13:42:21.000+00:00",
+      "lastUpdateDate": "2025-11-13T17:11:09.000+00:00",
+      "status": 1,
+      "updateInformation": null,
+      "refuse": 0,
+      "refuseFlag": 0,
+      "enerc": 1452,
+      "enercFlag": 0,
+      "enercKcal": 343,
+      "enercKcalFlag": 0,
+      "water": 13.5,
+      "waterFlag": 2,
+      "protcaa": 11.3,
+      "protcaaFlag": 1,
+      "prot": 12.7,
+      "protFlag": 2,
+      "fatnlea": 5,
+      "fatnleaFlag": 2,
+      "chole": 0,
+      "choleFlag": 1,
+      "fat": 6,
+      "fatFlag": 2,
+      "choavlm": 63.5,
+      "choavlmFlag": 2,
+      "choavlmMark": null,
+      "choavl": 57.8,
+      "choavlFlag": 2,
+      "choavldf": 59.9,
+      "choavldfFlag": 2,
+      "choavldfMark": null,
+      "fib": 7.4,
+      "fibFlag": 2,
+      "polyl": 0,
+      "polylFlag": 2,
+      "chocdf": 64.9,
+      "chocdfFlag": 2,
+      "oa": 0,
+      "oaFlag": 2,
+      "ash": 2.9,
+      "ashFlag": 2,
+      "na": 1,
+      "naFlag": 2,
+      "k": 600,
+      "ca": 160,
+      "caFlag": 2,
+      "mg": 270,
+      "mgFlag": 2,
+      "p": 540,
+      "fe": 9.4,
+      "feFlag": 2,
+      "zn": 5.8,
+      "znFlag": 2,
+      "cu": 0.92,
+      "cuFlag": 2,
+      "mn": 6.14,
+      "mnFlag": 2,
+      "idd": 1,
+      "iddFlag": 2,
+      "se": 13,
+      "seFlag": 2,
+      "cr": 7,
+      "crFlag": 2,
+      "mo": 59,
+      "moFlag": 2,
+      "ret": 0,
+      "retFlag": 1,
+      "carta": 0,
+      "cartaFlag": 2,
+      "cartb": 2,
+      "cartbFlag": 2,
+      "crypxb": 0,
+      "crypxbFlag": 2,
+      "cartbeq": 2,
+      "cartbeqFlag": 2,
+      "vitaRae": -1,
+      "vitaRaeFlag": 2,
+      "vitd": 0,
+      "vitdFlag": 1,
+      "tocpha": 1.3,
+      "tocphaFlag": 2,
+      "tocphb": 2.3,
+      "tocphbFlag": 2,
+      "tocphg": 0.2,
+      "tocphgFlag": 2,
+      "tocphd": 0.7,
+      "tocphdFlag": 2,
+      "vitk": 0,
+      "vitkFlag": 1,
+      "thia": 0.04,
+      "thiaFlag": 2,
+      "ribf": 0.14,
+      "ribfFlag": 2,
+      "nia": 1,
+      "niaFlag": 2,
+      "niac": 3.8,
+      "niacFlag": 1,
+      "vitb6a": 0.58,
+      "vitb6aFlag": 2,
+      "vitb12": 0,
+      "vitb12Flag": 1,
+      "fol": 130,
+      "folFlag": 2,
+      "pantac": 1.69,
+      "pantacFlag": 2,
+      "biot": 16,
+      "biotFlag": 2,
+      "vitc": 0,
+      "vitcFlag": 1,
+      "alc": 0,
+      "alcFlag": 2,
+      "naclEq": 0,
+      "naclEqFlag": 2,
+      "description": ",",
+      "descriptionFlag": "0",
+      "isActive": true,
+      "kflag": 2,
+      "pflag": 2
+    }
+  ]
+}
+
+```
+
+### 原材料取得（原材料ID指定） [GET /apix/FoodRawMaterial/findById{?foodId}]
+原材料データ（JSON形式）を取得するメソッド。原材料ID（内部キー）を指定して取得する。
+
++ Request
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Parameters
+    + foodId (required,number) ... 原材料を特定する内部キー
+
++ Response 200 (application/json)
+    + Attributes (RawMaterial)
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+
+```json
+{
+  "status": "Success",
+  "foodId": 1,
+  "foodNo": "1001",
+  "originalFoodId": 1,
+  "originalFoodGroupId": 1,
+  "originalFoodNo": "1001",
+  "originalIndexNo": "0001",
+  "foodName": "アマランサス　玄穀",
+  "foodFukuBunrui": "",
+  "foodRuiKubun": "",
+  "foodDaiBunrui": "アマランサス",
+  "foodCyuBunrui": "",
+  "foodSyoBunrui": "玄穀",
+  "foodSaibun": "",
+  "originalFoodName": "アマランサス　玄穀",
+  "categoryId": 1,
+  "hashtag": null,
+  "supplierId": null,
+  "purchasePrice": 0,
+  "volumeAmount": 0,
+  "weightOrCapacity": 0,
+  "convertRatio": 1,
+  "compositeRawMaterialsKb": 0,
+  "pricePerUnit": 0,
+  "makerId": null,
+  "makerName": null,
+  "sallerId": null,
+  "sallerName": null,
+  "compositeRawItemlist": null,
+  "displayName": null,
+  "placeOfOrigin": null,
+  "displayPlaceOfOrigin": null,
+  "revisionOfFoodNo": 0,
+  "nextFoodId": null,
+  "expireDate": null,
+  "createDate": "2025-08-27T13:42:21.000+00:00",
+  "lastUpdateDate": "2025-11-13T17:11:09.000+00:00",
+  "status": 1,
+  "updateInformation": null,
+  "refuse": 0,
+  "refuseFlag": 0,
+  "enerc": 1452,
+  "enercFlag": 0,
+  "enercKcal": 343,
+  "enercKcalFlag": 0,
+  "water": 13.5,
+  "waterFlag": 2,
+  "protcaa": 11.3,
+  "protcaaFlag": 1,
+  "prot": 12.7,
+  "protFlag": 2,
+  "fatnlea": 5,
+  "fatnleaFlag": 2,
+  "chole": 0,
+  "choleFlag": 1,
+  "fat": 6,
+  "fatFlag": 2,
+  "choavlm": 63.5,
+  "choavlmFlag": 2,
+  "choavlmMark": null,
+  "choavl": 57.8,
+  "choavlFlag": 2,
+  "choavldf": 59.9,
+  "choavldfFlag": 2,
+  "choavldfMark": null,
+  "fib": 7.4,
+  "fibFlag": 2,
+  "polyl": 0,
+  "polylFlag": 2,
+  "chocdf": 64.9,
+  "chocdfFlag": 2,
+  "oa": 0,
+  "oaFlag": 2,
+  "ash": 2.9,
+  "ashFlag": 2,
+  "na": 1,
+  "naFlag": 2,
+  "k": 600,
+  "ca": 160,
+  "caFlag": 2,
+  "mg": 270,
+  "mgFlag": 2,
+  "p": 540,
+  "fe": 9.4,
+  "feFlag": 2,
+  "zn": 5.8,
+  "znFlag": 2,
+  "cu": 0.92,
+  "cuFlag": 2,
+  "mn": 6.14,
+  "mnFlag": 2,
+  "idd": 1,
+  "iddFlag": 2,
+  "se": 13,
+  "seFlag": 2,
+  "cr": 7,
+  "crFlag": 2,
+  "mo": 59,
+  "moFlag": 2,
+  "ret": 0,
+  "retFlag": 1,
+  "carta": 0,
+  "cartaFlag": 2,
+  "cartb": 2,
+  "cartbFlag": 2,
+  "crypxb": 0,
+  "crypxbFlag": 2,
+  "cartbeq": 2,
+  "cartbeqFlag": 2,
+  "vitaRae": -1,
+  "vitaRaeFlag": 2,
+  "vitd": 0,
+  "vitdFlag": 1,
+  "tocpha": 1.3,
+  "tocphaFlag": 2,
+  "tocphb": 2.3,
+  "tocphbFlag": 2,
+  "tocphg": 0.2,
+  "tocphgFlag": 2,
+  "tocphd": 0.7,
+  "tocphdFlag": 2,
+  "vitk": 0,
+  "vitkFlag": 1,
+  "thia": 0.04,
+  "thiaFlag": 2,
+  "ribf": 0.14,
+  "ribfFlag": 2,
+  "nia": 1,
+  "niaFlag": 2,
+  "niac": 3.8,
+  "niacFlag": 1,
+  "vitb6a": 0.58,
+  "vitb6aFlag": 2,
+  "vitb12": 0,
+  "vitb12Flag": 1,
+  "fol": 130,
+  "folFlag": 2,
+  "pantac": 1.69,
+  "pantacFlag": 2,
+  "biot": 16,
+  "biotFlag": 2,
+  "vitc": 0,
+  "vitcFlag": 1,
+  "alc": 0,
+  "alcFlag": 2,
+  "naclEq": 0,
+  "naclEqFlag": 2,
+  "description": ",",
+  "descriptionFlag": "0",
+  "isActive": true,
+  "kflag": 2,
+  "pflag": 2
+}
+```
+
+### 原材料取得（原材料番号指定） [GET /apix/FoodRawMaterial/findByFoodNo{?foodNo}]
+原材料データ（JSON形式）を取得するメソッド。原材料番号を指定して取得する。
+
++ Request
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Parameters
+    + foodNo (required,string) ... 原材料を特定する内部キー
+
++ Response 200 (application/json)
+    + Attributes (RawMaterial)
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+
+```json
+{
+  "status": "Success",
+  "foodId": 1,
+  "foodNo": "1001",
+  "originalFoodId": 1,
+  "originalFoodGroupId": 1,
+  "originalFoodNo": "1001",
+  "originalIndexNo": "0001",
+  "foodName": "アマランサス　玄穀",
+  "foodFukuBunrui": "",
+  "foodRuiKubun": "",
+  "foodDaiBunrui": "アマランサス",
+  "foodCyuBunrui": "",
+  "foodSyoBunrui": "玄穀",
+  "foodSaibun": "",
+  "originalFoodName": "アマランサス　玄穀",
+  "categoryId": 1,
+  "hashtag": null,
+  "supplierId": null,
+  "purchasePrice": 0,
+  "volumeAmount": 0,
+  "weightOrCapacity": 0,
+  "convertRatio": 1,
+  "compositeRawMaterialsKb": 0,
+  "pricePerUnit": 0,
+  "makerId": null,
+  "makerName": null,
+  "sallerId": null,
+  "sallerName": null,
+  "compositeRawItemlist": null,
+  "displayName": null,
+  "placeOfOrigin": null,
+  "displayPlaceOfOrigin": null,
+  "revisionOfFoodNo": 0,
+  "nextFoodId": null,
+  "expireDate": null,
+  "createDate": "2025-08-27T13:42:21.000+00:00",
+  "lastUpdateDate": "2025-11-13T17:11:09.000+00:00",
+  "status": 1,
+  "updateInformation": null,
+  "refuse": 0,
+  "refuseFlag": 0,
+  "enerc": 1452,
+  "enercFlag": 0,
+  "enercKcal": 343,
+  "enercKcalFlag": 0,
+  "water": 13.5,
+  "waterFlag": 2,
+  "protcaa": 11.3,
+  "protcaaFlag": 1,
+  "prot": 12.7,
+  "protFlag": 2,
+  "fatnlea": 5,
+  "fatnleaFlag": 2,
+  "chole": 0,
+  "choleFlag": 1,
+  "fat": 6,
+  "fatFlag": 2,
+  "choavlm": 63.5,
+  "choavlmFlag": 2,
+  "choavlmMark": null,
+  "choavl": 57.8,
+  "choavlFlag": 2,
+  "choavldf": 59.9,
+  "choavldfFlag": 2,
+  "choavldfMark": null,
+  "fib": 7.4,
+  "fibFlag": 2,
+  "polyl": 0,
+  "polylFlag": 2,
+  "chocdf": 64.9,
+  "chocdfFlag": 2,
+  "oa": 0,
+  "oaFlag": 2,
+  "ash": 2.9,
+  "ashFlag": 2,
+  "na": 1,
+  "naFlag": 2,
+  "k": 600,
+  "ca": 160,
+  "caFlag": 2,
+  "mg": 270,
+  "mgFlag": 2,
+  "p": 540,
+  "fe": 9.4,
+  "feFlag": 2,
+  "zn": 5.8,
+  "znFlag": 2,
+  "cu": 0.92,
+  "cuFlag": 2,
+  "mn": 6.14,
+  "mnFlag": 2,
+  "idd": 1,
+  "iddFlag": 2,
+  "se": 13,
+  "seFlag": 2,
+  "cr": 7,
+  "crFlag": 2,
+  "mo": 59,
+  "moFlag": 2,
+  "ret": 0,
+  "retFlag": 1,
+  "carta": 0,
+  "cartaFlag": 2,
+  "cartb": 2,
+  "cartbFlag": 2,
+  "crypxb": 0,
+  "crypxbFlag": 2,
+  "cartbeq": 2,
+  "cartbeqFlag": 2,
+  "vitaRae": -1,
+  "vitaRaeFlag": 2,
+  "vitd": 0,
+  "vitdFlag": 1,
+  "tocpha": 1.3,
+  "tocphaFlag": 2,
+  "tocphb": 2.3,
+  "tocphbFlag": 2,
+  "tocphg": 0.2,
+  "tocphgFlag": 2,
+  "tocphd": 0.7,
+  "tocphdFlag": 2,
+  "vitk": 0,
+  "vitkFlag": 1,
+  "thia": 0.04,
+  "thiaFlag": 2,
+  "ribf": 0.14,
+  "ribfFlag": 2,
+  "nia": 1,
+  "niaFlag": 2,
+  "niac": 3.8,
+  "niacFlag": 1,
+  "vitb6a": 0.58,
+  "vitb6aFlag": 2,
+  "vitb12": 0,
+  "vitb12Flag": 1,
+  "fol": 130,
+  "folFlag": 2,
+  "pantac": 1.69,
+  "pantacFlag": 2,
+  "biot": 16,
+  "biotFlag": 2,
+  "vitc": 0,
+  "vitcFlag": 1,
+  "alc": 0,
+  "alcFlag": 2,
+  "naclEq": 0,
+  "naclEqFlag": 2,
+  "description": ",",
+  "descriptionFlag": "0",
+  "isActive": true,
+  "kflag": 2,
+  "pflag": 2
+}
+```
+
+
+
+### List All Questions [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "question": "Favourite programming language?",
+                "published_at": "2015-08-05T08:40:51.620Z",
+                "choices": [
+                    {
+                        "choice": "Swift",
+                        "votes": 2048
+                    }, {
+                        "choice": "Python",
+                        "votes": 1024
+                    }, {
+                        "choice": "Objective-C",
+                        "votes": 512
+                    }, {
+                        "choice": "Ruby",
+                        "votes": 256
+                    }
+                ]
+            }
+        ]
+
+### Create a New Question [POST]
+
+You may create your own question using this action. It takes a JSON
+object containing a question and a collection of answers in the
+form of choices.
+
++ Request (application/json)
+
+        {
+            "question": "Favourite programming language?",
+            "choices": [
+                "Swift",
+                "Python",
+                "Objective-C",
+                "Ruby"
+            ]
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /questions/2
+
+    + Body
+
+            {
+                "question": "Favourite programming language?",
+                "published_at": "2015-08-05T08:40:51.620Z",
+                "choices": [
+                    {
+                        "choice": "Swift",
+                        "votes": 0
+                    }, {
+                        "choice": "Python",
+                        "votes": 0
+                    }, {
+                        "choice": "Objective-C",
+                        "votes": 0
+                    }, {
+                        "choice": "Ruby",
+                        "votes": 0
+                    }
+                ]
+            }
