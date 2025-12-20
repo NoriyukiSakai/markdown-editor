@@ -200,7 +200,6 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
 ## RawMaterials (array[RawMaterial])
 
-+ (RawMaterial) - 原材料オブジェクトのリスト
 
 ## RawMaterialSupplier (object)
 
@@ -245,8 +244,9 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
         + records (number,required) - 取得したデータ件数 レコード無しは0
         + item (RawMaterials,optional) - 原材料データの配列
 
-        + Body
-            {"message" , "success" }
+    + Body
+    
+        {"message" , "success" }
             
 
 ### 原材料取得（原材料ID指定） [GET /apix/FoodRawMaterial/findById{?foodId}]
@@ -669,7 +669,6 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     + foodId (number,required) - 原材料を特定する内部キー
 
 + Response 200 (application/json)
+
     + Attributes (RawMaterialSuppliers)
         + status (string,required) - 成功時はSuccess、失敗時はFail
-        
-    + Body
