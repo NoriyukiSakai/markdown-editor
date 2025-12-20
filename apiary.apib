@@ -220,7 +220,8 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     ```
 
 + Parameters
-    + pattern_id (required,number) ... 検索対象指定（1:８訂原材料一覧, 2:拡張原材料一覧, 3:ユーザ定義原材料一覧）
+    + pattern_id: 1 (required,number) - 検索対象指定（1:８訂原材料一覧, 2:拡張原材料一覧, 3:ユーザ定義原材料一覧）
+        + default: 1
 
 + Response 200 (application/json)
     + Attributes 
@@ -402,7 +403,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     ```
 
 + Parameters
-    + foodId (required,number) ... 原材料を特定する内部キー
+    + foodId: (required,number) - 原材料を特定する内部キー
 
 + Response 200 (application/json)
     + Attributes (RawMaterial)
@@ -576,7 +577,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     ```
 
 + Parameters
-    + foodNo (required,string) ... 原材料を特定する内部キー
+    + foodNo: (required,string) - 原材料を特定する原材料番号
 
 + Response 200 (application/json)
     + Attributes (RawMaterial)
@@ -739,76 +740,25 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 }
 ```
 
-
-
-### List All Questions [GET]
-
-+ Response 200 (application/json)
-
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
-
-### Create a New Question [POST]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
+### 原材料データ登録 [POST /apix/FoodRawMaterial/insert]
+原材料データを新規登録する。原材料のデータを含むJSONオブジェクトを使用する。
 
 + Request (application/json)
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    ```
+    
+    + Attributes (RawMaterial)
 
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
+    + Body 
 
 + Response 201 (application/json)
 
     + Headers
+        Location: /apix/FoodRawMaterail/0
 
-            Location: /questions/2
+    + Attributes (RawMaterial)
+        + status (string,required) - 成功時はSuccess、失敗時はFail
 
     + Body
-
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
-            }
