@@ -47,11 +47,6 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
 # Data Structures
 
-## Test (object)
-
-* status (string,required) - success
-+ id (number , required) - 0
-
 ## RawMaterial (object)
 
 + foodId (number , required) - 原材料ID（内部キー）
@@ -203,8 +198,30 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 + description_flag (number , optional) - 0:初期値, 1:参照値 2:実測値 3:変更値 
 + is_active (boolean , optional) - アクティブフラグ
 
-## RawMaterials (array[RawMaterial]
+## RawMaterials (array[RawMaterial])
+
 + (RawMaterial) - 原材料オブジェクトのリスト
+
+## RawMaterialSupplier (object)
+
++ id (number , required) - ID（内部キー）
++ foodId (number, required) - 原材料ID（原材料を特定する内部キー）
++ supplierId (number, required) - 仕入元ID（仕入元を特定する内部キー）
++ supplierName (string , required) - 仕入元名
++ purchasePrice (number , required) - 仕入単価
++ volumeAmount (number , required) - 仕入容量（gかmlで入力）
++ weightOrCapacity (number , required) - 0:重さ（g）、1:容量（ml）
++ convertRation (number , required) - 重さ÷容量での変換レート、デフォルトは1.00
++ pricePerUnit (number , required) - 100g単価　デフォルト0
++ createDate (number , optional) - 作成日
++ lastUpdateDate (number , optional) - 更新日
++ isActive ( boolean , optional) -　アクティブフラグ　True:有効、False:無効
+
+## RawMaterialSuppliers (array[RawMaterialSupplier])
+
++ (RawMaterialSupplier) - 原材料オブジェクトのリスト
+
+
 
 ## 原材料管理API [/apix/FoodRawMaterial/]
 原材料に関わるAPIを定義します。
@@ -761,4 +778,61 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     + Attributes (RawMaterial)
         + status (string,required) - 成功時はSuccess、失敗時はFail
 
+    + Body 
+
+### 原材料データ更新 [POST /apix/FoodRawMaterial/update]
+原材料データを更新する。原材料のデータを含むJSONオブジェクトを使用する。
+
++ Request (application/json)
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    ```
+    
+    + Attributes (RawMaterial)
+
+    + Body 
+
++ Response 200 (application/json)
+
+    + Attributes (RawMaterial)
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+
+    + Body 
+
+### 原材料削除（原材料ID指定） [GET /apix/FoodRawMaterial/findById{?foodId}]
+原材料データを削除するメソッド。削除対象の原材料ID（内部キー）を指定する。
+
++ Request
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Parameters
+    + foodId: (required,number) - 原材料を特定する内部キー
+
++ Response 200 (application/json)
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + id (number,required) - 削除対象の原材料ID
+
+### 仕入元情報取得 [GET /apix/FoodRawMaterial/findById{?foodId}]
+原材料の仕入先として登録されている情報を取得する。
+
++ Request
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Parameters
+    + foodId: (required,number) - 原材料を特定する内部キー
+
++ Response 200 (application/json)
+    + Attributes (RawMaterialSuppliers)
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        
     + Body
