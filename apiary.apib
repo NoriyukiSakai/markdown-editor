@@ -1005,7 +1005,6 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     + Attributes (MasterSupplier)
         + status (string,required) - 成功時はSuccess、失敗時はFail
 
-
 ### 仕入元登録 [POST /apix/MasterSupplier/insert]
 仕入元情報を登録
 
@@ -1027,7 +1026,6 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
     + Body 
 
-
 ### 仕入元更新 [POST /apix/MasterSupplier/update]
 仕入元情報を更新
 + Request (application/json)
@@ -1047,8 +1045,6 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
         + status (string,required) - 成功時はSuccess、失敗時はFail
 
     + Body 
-
-
 
 ### 仕入元削除 [GET /apix/MasterSupplier/delete{?id}]
 仕入元情報を削除する。
@@ -1071,9 +1067,8 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
         + status (string,required) - 成功時はSuccess、失敗時はFail
         + id (number,required) - 削除された仕入元ID（内部キー）
 
-
 ### 仕入元選択一覧 [GET /apix/Master/MasterSupplier/getSelect]
-選択リスト等で使用するためのラベルと、値のリスト
+選択リスト等で使用するために仕入元名のラベルと、値の一覧を取得する。
 
 + Request
 
@@ -1095,17 +1090,267 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 ### 製造者（社）一覧
 製造者（社）の一覧を取得する。
 
++ Request
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Response
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + records (number,required) - 取得したデータ件数 レコード無しは0
+        + item (MasterMakers,optional) - 製造者（社）リスト
+
 ### 製造者(社)簡易一覧 [GET /apix/MasterMaker/getList]
+製造者（社）簡易一覧用データ取得
+
++ Request
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Response
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + records (number,required) - 取得したデータ件数 レコード無しは0
+        + item (CommonListContents,optional) - 簡易リスト
+
 ### 製造者(社)詳細 [GET /apix/MasterMaker/findById{?id}]
+製造者（社）情報データ取得
+
++ Request
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Parameters
+    + id (number, required) - 製造者（社）情報のID（内部キー）
+
++ Response
+
+    + Attributes (MasterMaker)
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+
 ### 製造者(社)登録 [POST /apix/MasterMaker/insert]
+製造者（社）情報を登録
+
++ Request (application/json)
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    ```
+    
+    + Attributes (MasterMaker)
+
+    + Body 
+
++ Response 200 (application/json)
+
+    + Attributes (MasterMaker)
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+
+    + Body 
+
 ### 製造者(社)更新 [POST /apix/MasterMaker/update]
+製造者（社）情報を更新
++ Request (application/json)
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    ```
+    
+    + Attributes (MasterMaker)
+
+    + Body 
+
++ Response 200 (application/json)
+
+    + Attributes (MasterMaker)
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+
+    + Body 
+
 ### 製造者(社)削除 [GET /apix/MasterMaker/delete{?id}]
+製造者（社）情報を削除する。
+
++ Request
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Parameters
+
+    + id (number,required) - 原材料を特定する内部キー
+
++ Response 200 (application/json)
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + id (number,required) - 削除された製造者（社）ID（内部キー）
+
 ### 製造者(社)選択一覧 [GET /apix/MasterMaker/getSelect]
+選択リスト等で使用するために製造者（社）名のラベルと、値の一覧を取得する。
+
++ Request
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Response
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + records (number,required) - 取得したデータ件数 レコード無しは0
+        + item (SelectItems,optional) - 簡易リスト
 
 ### 販売元一覧
+販売元の一覧を取得する。
+
++ Request
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Response
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + records (number,required) - 取得したデータ件数 レコード無しは0
+        + item (MasterSallers,optional) - 販売元リスト
+
 ### 販売元簡易一覧 [GET /apix/MasterSaller/getList]
+販売元簡易一覧用データ取得
+
++ Request
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Response
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + records (number,required) - 取得したデータ件数 レコード無しは0
+        + item (CommonListContents,optional) - 簡易リスト
+
 ### 販売元詳細 [GET /apix/MasterSaller/findById{?id}]
+製造者（社）情報データ取得
+
++ Request
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Parameters
+    + id (number, required) - 販売元情報のID（内部キー）
+
++ Response
+
+    + Attributes (MasterSaller)
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+
 ### 販売元登録 [POST /apix/MasterSaller/insert]
+販売元情報を登録
+
++ Request (application/json)
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    ```
+    
+    + Attributes (MasterSaller)
+
+    + Body 
+
++ Response 200 (application/json)
+
+    + Attributes (MasterSaller)
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+
+    + Body 
+
 ### 販売元更新 [POST /apix/MasterSaller/update]
+製造者（社）情報を更新
++ Request (application/json)
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    ```
+    
+    + Attributes (MasterSaller)
+
+    + Body 
+
++ Response 200 (application/json)
+
+    + Attributes (MasterSaller)
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+
+    + Body 
+
 ### 販売元削除 [GET /apix/MasterSaller/delete{?id}]
+販売元情報を削除する。
+
++ Request
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Parameters
+
+    + id (number,required) - 原材料を特定する内部キー
+
++ Response 200 (application/json)
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + id (number,required) - 削除された販売元ID（内部キー）
+
 ### 販売元選択一覧 [GET /apix/MasterSaller/getSelect]
+選択リスト等で使用するために販売元名のラベルと、値の一覧を取得する。
+
++ Request
+
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Response
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + records (number,required) - 取得したデータ件数 レコード無しは0
+        + item (SelectItems,optional) - 簡易リスト
