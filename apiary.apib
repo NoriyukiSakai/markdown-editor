@@ -883,7 +883,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
         + records (number,required) - 取得したデータ件数 レコード無しは0
         + item (RawMaterialSuppliers,optional) - 対象原材料の仕入元リスト
 
-### 原材料仕入元登録 [POST] /apix/FoodRawMaterialSupplier/insert
+### 原材料仕入元登録 [POST /apix/FoodRawMaterialSupplier/insert]
 原材料の仕入元を追加登録
 
 + Request (application/json)
@@ -947,7 +947,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
         + id (number,required) - 削除されたの原材料の仕入元ID
 
 
-## マスター管理API
+## マスター管理API [/apix/]
 各種マスターデータの管理用APIを定義します。
 
 ### 仕入元一覧 [GET /apix/MasterSupplier/getData]
@@ -960,7 +960,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     Accept: text/plain
     ```
 
-+ Response
++ Response 200 (application/json)
 
     + Attributes
         + status (string,required) - 成功時はSuccess、失敗時はFail
@@ -978,7 +978,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     Accept: text/plain
     ```
 
-+ Response
++ Response 200 (application/json)
 
     + Attributes
         + status (string,required) - 成功時はSuccess、失敗時はFail
@@ -1000,7 +1000,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 + Parameters
     + id (number, required) - 仕入元情報のID（内部キー）
 
-+ Response
++ Response 200 (application/json)
 
     + Attributes (MasterSupplier)
         + status (string,required) - 成功時はSuccess、失敗時はFail
@@ -1067,7 +1067,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
         + status (string,required) - 成功時はSuccess、失敗時はFail
         + id (number,required) - 削除された仕入元ID（内部キー）
 
-### 仕入元選択一覧 [GET /apix/Master/MasterSupplier/getSelect]
+### 仕入元選択一覧 [GET /apix/MasterSupplier/getSelect]
 選択リスト等で使用するために仕入元名のラベルと、値の一覧を取得する。
 
 + Request
@@ -1078,7 +1078,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     Accept: text/plain
     ```
 
-+ Response
++ Response 200 (application/json)
 
     + Attributes
         + status (string,required) - 成功時はSuccess、失敗時はFail
@@ -1087,7 +1087,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
 
 
-### 製造者（社）一覧
+### 製造者（社）一覧 [GET /apix/MasterMaker/getData]
 製造者（社）の一覧を取得する。
 
 + Request
@@ -1097,7 +1097,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     Accept: text/plain
     ```
 
-+ Response
++ Response 200 (application/json)
 
     + Attributes
         + status (string,required) - 成功時はSuccess、失敗時はFail
@@ -1115,7 +1115,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     Accept: text/plain
     ```
 
-+ Response
++ Response  200 (application/json)
 
     + Attributes
         + status (string,required) - 成功時はSuccess、失敗時はFail
@@ -1136,7 +1136,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 + Parameters
     + id (number, required) - 製造者（社）情報のID（内部キー）
 
-+ Response
++ Response  200 (application/json)
 
     + Attributes (MasterMaker)
         + status (string,required) - 成功時はSuccess、失敗時はFail
@@ -1214,14 +1214,14 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     Accept: text/plain
     ```
 
-+ Response
++ Response  200 (application/json)
 
     + Attributes
         + status (string,required) - 成功時はSuccess、失敗時はFail
         + records (number,required) - 取得したデータ件数 レコード無しは0
         + item (SelectItems,optional) - 簡易リスト
 
-### 販売元一覧
+### 販売元一覧 [GET /apix/MasterSaller/getData]
 販売元の一覧を取得する。
 
 + Request
@@ -1231,7 +1231,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     Accept: text/plain
     ```
 
-+ Response
++ Response  200 (application/json)
 
     + Attributes
         + status (string,required) - 成功時はSuccess、失敗時はFail
@@ -1249,7 +1249,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     Accept: text/plain
     ```
 
-+ Response
++ Response  200 (application/json)
 
     + Attributes
         + status (string,required) - 成功時はSuccess、失敗時はFail
@@ -1270,7 +1270,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 + Parameters
     + id (number, required) - 販売元情報のID（内部キー）
 
-+ Response
++ Response 200 (application/json)
 
     + Attributes (MasterSaller)
         + status (string,required) - 成功時はSuccess、失敗時はFail
@@ -1348,7 +1348,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
     Accept: text/plain
     ```
 
-+ Response
++ Response 200 (application/json)
 
     + Attributes
         + status (string,required) - 成功時はSuccess、失敗時はFail
