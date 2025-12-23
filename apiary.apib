@@ -47,6 +47,110 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
 # Data Structures
 
+## SemiProductItemDetail
+
++ itemId ( number , required ) - 半製品ID（内部キー）
++ materialKb ( boolean , required ) - 原材料区分（True: 原材料、False：仕込品）
++ foodId ( number , required ) - 原材料ID（内部キー）
++ preProductId ( number , required ) - 仕込品ID（内部キー）
++ foodNo (string , required ) - 番号（仕込品番号or原材料番号）
++ foodName ( string , required ) - 名称（仕込品名or原材料名）
++ mixingRatio ( number , required ) - 配合率
++ weight ( number , required ) - 重量
++ costPrice ( number , required ) - 原価
++ energy ( number ,required ) - エネルギー
++ protein ( number ,required ) - タンパク質
++ fat ( number ,required ) - 脂質
++ carbo ( number ,required ) - 炭水化物
++ sugar ( number ,required ) - 糖質　炭水化物総量から食物繊維量を引いた数値 
++ sodium ( number ,required ) - 食塩相当量
+
+## SemiProductItemDetails (array[SemiProductItemDetail])
+
+## SemiProductItem (object)
+
++ itemId ( number , required ) - 半製品ID（内部キー）
++ itemNo ( string , required ) - 半製品品番号
++ itemKind ( number , required )  - 半製品分類
++ itemName ( string , required ) - 半製品名
++ displayName ( string , required ) - 表示名
++ capacity ( number , required ) - 内容量
++ unit ( number , required ) - 単位（選択式）
++ infUnit ( number , required ) - （栄養成分表示）単位 0:gあたり 1:１個あたり
++ infVolume ( number , required ) - （栄養成分表示）g
++ infDisplay ( number , required ) - （栄養成分表示）表記 0:の目安です 1:推定値です 2:の日本食品成分表の計算による 3:のサンプル品分析による推定値
++ infEnergy ( number ,required ) - （栄養成分表示）エネルギー
++ infProtein ( number ,required ) - （栄養成分表示）タンパク質
++ infFat ( number ,required ) - （栄養成分表示）脂質
++ infCarbo ( number ,required ) - （栄養成分表示）炭水化物
++ infSugar ( number ,required ) - （栄養成分表示）糖質　炭水化物総量から食物繊維量を引いた数値 
++ infSodium ( number ,required ) - （栄養成分表示）食塩相当量
++ infLmtKind( number , required ) - (栄養成分表示)表記種別0:賞味期限、1:消費期限
++ infLmtDateFlag( boolean , required ) - (栄養成分表示)日付指定（True:する。False:しない）
++ infLmtDate (string , optional ) - （栄養成分表示）日付
++ infStorageMethod ( string , optional ) - （栄養成分表示）保存方法
++ infContamiFlag (boolean ,required ) - コンタミネーションフラグ（True:あり、False:なし）
++ infContamination ( string , optional) - （栄養成分表示）コンタミネーション内容
++ weightSum (number , required ) - 重量合計
++ costPriceSum ( number, required ) - 原価合計
++ detailCount ( number , required ) - 明細件数
++ placeOfOrigin (string ,optional ) - 原産地
++ purpose ( string , optional ) - 用途
+
+## SemiProductItems (array[SemiProductItem])
+
+
+## PreProductItemDetail
+
++ itemId ( number , required ) - 仕込品ID（内部キー）
++ foodId ( number , required ) - 原材料ID（内部キー）
++ composite_raw_materials_kb ( boolean , required ) - 複合原材料フラグ 0(False):通常 1(True):複合原材料(中間加工原料)
++ foodName ( string , required ) - 原材料名
++ mixingRatio ( number , required ) - 配合率
++ weight ( number , required ) - 重量
++ costPrice ( number , required ) - 原価
++ energy ( number ,required ) - エネルギー
++ protein ( number ,required ) - タンパク質
++ fat ( number ,required ) - 脂質
++ carbo ( number ,required ) - 炭水化物
++ sugar ( number ,required ) - 糖質　炭水化物総量から食物繊維量を引いた数値 
++ sodium ( number ,required ) - 食塩相当量
+
+## PreProductItemMaterials (array[PreProductItemDetail])
+
+
+## PreProductItem (object)
+
++ itemId ( number , required ) - 仕込品ID（内部キー）
++ itemNo ( string , required ) - 仕込品番号
++ itemKind ( number , required )  - 仕込品分類
++ itemName ( string , required ) - 仕込品名
++ displayName ( string , required ) - 表示名
++ capacity ( number , required ) - 内容量
++ unit ( number , required ) - 単位（選択式）
++ infUnit ( number , required ) - （栄養成分表示）単位 0:gあたり 1:１個あたり
++ infVolume ( number , required ) - （栄養成分表示）g
++ infDisplay ( number , required ) - （栄養成分表示）表記 0:の目安です 1:推定値です 2:の日本食品成分表の計算による 3:のサンプル品分析による推定値
++ infEnergy ( number ,required ) - （栄養成分表示）エネルギー
++ infProtein ( number ,required ) - （栄養成分表示）タンパク質
++ infFat ( number ,required ) - （栄養成分表示）脂質
++ infCarbo ( number ,required ) - （栄養成分表示）炭水化物
++ infSugar ( number ,required ) - （栄養成分表示）糖質　炭水化物総量から食物繊維量を引いた数値 
++ infSodium ( number ,required ) - （栄養成分表示）食塩相当量
++ infLmtKind( number , required ) - （栄養成分表示）表記種別0:賞味期限、1:消費期限
++ infLmtDateFlag( boolean , required ) - （栄養成分表示）日付指定（True:する。False:しない）
++ infLmtDate (string , optional ) - （栄養成分表示）日付
++ infStorageMethod ( string , optional ) - （栄養成分表示）保存方法
++ infContamiFlag (boolean ,required ) - コンタミネーションフラグ（True:あり、False:なし）
++ infContamination ( string , optional) - （栄養成分表示）コンタミネーション内容
++ weightSum (number , required ) - 重量合計
++ costPriceSum ( number, required ) - 原価合計
++ detailCount ( number , required ) - 明細件数
++ placeOfOrigin ( string , optional ) - 原産地
++ purpose ( string , optional ) - 用途
+
+## PreProductItems (array[PreProductItem])
+
 ## RawMaterial (object)
 
 + foodId (number , required) - 原材料ID（内部キー）
@@ -69,7 +173,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 + volume_amount (number , optional) - 仕入れ容量(gかmlで入力) 
 + weight_or_capacity (number , optional) - 0:重さ(g) 1:容量(ml)
 + convertRatio (number , optional) - 重さ/容量 1:100g/100ml ......
-+ composite_raw_materials_kb (number , optional) - 複合原材料フラグ 0:通常 1:複合原材料(中間加工原料)
++ composite_raw_materials_kb (boolean , required ) - 複合原材料フラグ false:通常 true:複合原材料(中間加工原料)
 + price_per_unit (number , optional) - 100グラム単価
 + maker_id (number , optional) - 製造元
 + saller_id (number , optional) - 販売元
@@ -257,6 +361,27 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 + label (string , required ) - 表示名
 
 ## SelectItems (array[SelectItem])
+
+## 半完成品管理API [/apix/FoodSemiMaterial/]
+半完成品に関わるAPIを定義します。
+
+### 半完成品リスト取得
+半完成品（JSON形式）を取得するメソッド。
+
++ Request
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+    
++ Response 200 (appication/json)
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + records (number,required) - 取得したデータ件数 レコード無しは0
+        + item (SemiMaterials,optional) - 原材料データの配列
+    
 
 ## 原材料管理API [/apix/FoodRawMaterial/]
 原材料に関わるAPIを定義します。
