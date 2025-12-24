@@ -47,20 +47,29 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
 # Data Structures
 
-## SemiProductInfo
 
-+ itemId (number , required) - 半製品ID
-+ sallerId ( number , optional) - 販売者ID
-+ makerId ( number , optional) - 製造者ID
+## WorkProcedureDetail
+
++ itemId ( number , required ) - 半製品ID（内部キー）
++ stepNo ( number , required ) - 作業順
++ semiId ( number , required ) - 半製品ID（内部キー）当該ステップの完成物としての仕込品
++ description ( string , required ) - 作業内容
+
+## WorkProcedureInfo
+
++ itemId (number , required) - 半製品ID（内部キー）
++ sallerId ( number , optional) - 販売者ID（内部キー）
++ makerId ( number , optional) - 製造者ID（内部キー）
 + nutFactInfo ( string , optional ) - 成分表示情報
 + allergyInfo ( string , optional ) - アレルギー情報
 
 ## SemiProductItemDetail
 
-+ itemId ( number , required ) - 半製品ID（内部キー）
++ detailId ( number , required ) - 半製品明細ID（内部キー）
++ semiId ( number , required ) - 半製品ID（内部キー）
 + materialKb ( boolean , required ) - 原材料区分（True: 原材料、False：仕込品）
 + foodId ( number , required ) - 原材料ID（内部キー）
-+ preProductId ( number , required ) - 仕込品ID（内部キー）
++ preId ( number , required ) - 仕込品ID（内部キー）
 + foodNo (string , required ) - 番号（仕込品番号or原材料番号）
 + foodName ( string , required ) - 名称（仕込品名or原材料名）
 + mixingRatio ( number , required ) - 配合率
@@ -77,10 +86,10 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
 ## SemiProductItem (object)
 
-+ itemId ( number , required ) - 半製品ID（内部キー）
-+ itemNo ( string , required ) - 半製品品番号
-+ itemKind ( number , required )  - 半製品分類
-+ itemName ( string , required ) - 半製品名
++ semiId ( number , required ) - 半製品ID（内部キー）
++ semiNo ( string , required ) - 半製品品番号
++ semiKind ( number , required )  - 半製品分類
++ semiName ( string , required ) - 半製品名
 + displayName ( string , required ) - 表示名
 + capacity ( number , required ) - 内容量
 + unit ( number , required ) - 単位（選択式）
@@ -109,8 +118,8 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
 
 ## PreProductItemDetail
-
-+ itemId ( number , required ) - 仕込品ID（内部キー）
++ detailId (number , required ) 仕込品明細ID（内部キー）
++ preId ( number , required ) - 仕込品ID（内部キー）
 + foodId ( number , required ) - 原材料ID（内部キー）
 + composite_raw_materials_kb ( boolean , required ) - 複合原材料フラグ 0(False):通常 1(True):複合原材料(中間加工原料)
 + foodName ( string , required ) - 原材料名
@@ -129,10 +138,10 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
 ## PreProductItem (object)
 
-+ itemId ( number , required ) - 仕込品ID（内部キー）
-+ itemNo ( string , required ) - 仕込品番号
-+ itemKind ( number , required )  - 仕込品分類
-+ itemName ( string , required ) - 仕込品名
++ preId ( number , required ) - 仕込品ID（内部キー）
++ preNo ( string , required ) - 仕込品番号
++ preKind ( number , required )  - 仕込品分類
++ preName ( string , required ) - 仕込品名
 + displayName ( string , required ) - 表示名
 + capacity ( number , required ) - 内容量
 + unit ( number , required ) - 単位（選択式）
