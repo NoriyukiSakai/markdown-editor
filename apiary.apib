@@ -47,6 +47,14 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
 # Data Structures
 
+## SemiProductInfo
+
++ itemId (number , required) - 半製品ID
++ sallerId ( number , optional) - 販売者ID
++ makerId ( number , optional) - 製造者ID
++ nutFactInfo ( string , optional ) - 成分表示情報
++ allergyInfo ( string , optional ) - アレルギー情報
+
 ## SemiProductItemDetail
 
 + itemId ( number , required ) - 半製品ID（内部キー）
@@ -429,7 +437,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
     + Body
 
-### 半製品明細リスト取得 [GET /apix/FoodPreProductDetail/GetData{?id}]
+### 仕込品明細リスト取得 [GET /apix/FoodPreProductDetail/GetData{?id}]
 指定仕込品の明細リスト（JSON形式）を取得するメソッド
 
 + Request
