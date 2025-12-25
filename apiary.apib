@@ -5,10 +5,10 @@ HOST: https://localhost:8081/
 
 ## このドキュメントの見方
 このドキュメントに定義されているAPIは下記の分類で構成されています。
-- 原材料管理API
-- 半完成品管理API
-- 完成品管理API
-- マスター管理API
+- 半完成品管理API（SemiProduct）
+- 仕込品管理API（PreProduct）
+- 原材料管理API（RawMaterial）
+- マスター管理API（Master）
 
 ## Headerについて
 このAPIは認証トークンが必要です。各APIには次のようにヘッダにトークンを設定します。
@@ -47,21 +47,26 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 
 # Data Structures
 
-
 ## WorkProcedureDetail
 
-+ itemId ( number , required ) - 半製品ID（内部キー）
++ workStepId ( number ,required ) - 作業ステップID
++ workId ( number , required ) - 作業ID（内部キー）
 + stepNo ( number , required ) - 作業順
-+ semiId ( number , required ) - 半製品ID（内部キー）当該ステップの完成物としての仕込品
-+ description ( string , required ) - 作業内容
++ stepName ( string , required ) - 作業ステップ名
+* stepWork ( string , optional ) - 作業ステップ内容
++ stepGuide ( string , optional ) - 作業ステップガイド
++ stepDescription ( string , optional) - 補助説明
++ preId ( number , optional ) - 仕込品ID（内部キー）当該ステップの完成物としての仕込品
 
 ## WorkProcedureInfo
 
-+ itemId (number , required) - 半製品ID（内部キー）
++ workId (number , required) - 作業ID（内部キー）
++ workName ( string , required ) - 作業名
 + sallerId ( number , optional) - 販売者ID（内部キー）
 + makerId ( number , optional) - 製造者ID（内部キー）
 + nutFactInfo ( string , optional ) - 成分表示情報
 + allergyInfo ( string , optional ) - アレルギー情報
++ semiId (number , optional) - 半製品ID（内部キー）当該作業における完成物としての半製品
 
 ## SemiProductItemDetail
 
