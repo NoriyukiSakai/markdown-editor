@@ -50,7 +50,7 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 ## WorkProcedureDetail
 
 + workStepId ( number ,required ) - 作業ステップID
-+ workId ( number , required ) - 作業ID（内部キー）
++ receiptId ( number , required ) - 作業ID（内部キー）
 + stepNo ( number , required ) - 作業順
 + stepName ( string , required ) - 作業ステップ名
 * stepWork ( string , optional ) - 作業ステップ内容
@@ -58,15 +58,21 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 + stepDescription ( string , optional) - 補助説明
 + preId ( number , optional ) - 仕込品ID（内部キー）当該ステップの完成物としての仕込品
 
-## WorkProcedureInfo
+## WorkProcedureDetails ( array[WorkProcedureDetail])
 
-+ workId (number , required) - 作業ID（内部キー）
+## ReceiptDetails (array[SemiProductItemDetail])
+
+## ReceiptInfo
+
++ receiptId (number , required) - 作業ID（内部キー）
++ semiId (number , optional) - 半製品ID（内部キー）当該作業における完成物としての半製品
 + workName ( string , required ) - 作業名
 + sallerId ( number , optional) - 販売者ID（内部キー）
 + makerId ( number , optional) - 製造者ID（内部キー）
 + nutFactInfo ( string , optional ) - 成分表示情報
 + allergyInfo ( string , optional ) - アレルギー情報
-+ semiId (number , optional) - 半製品ID（内部キー）当該作業における完成物としての半製品
+
+## ReceiptInfoes (array[ReceiptInfo])
 
 ## SemiProductItemDetail
 
@@ -383,6 +389,72 @@ Response BodyはJSONオブジェクトとして次の形式で戻ります。
 + label (string , required ) - 表示名
 
 ## SelectItems (array[SelectItem])
+
+
+## レセプト管理API [/apix/Receipt/]
+レセプトに関するAPIを定義します。
+
+### レセプトリスト取得 [GET /apx/Receipt/GetData]
+
++ Request
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+    
++ Response 200 (appication/json)
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + records (number,required) - 取得したデータ件数 レコード無しは0
+        + item (ReceiptInfoes,optional) - レセプトデータの配列
+
+    + Body
+
+### レセプト材料リスト取得 [GET /apix/ReceiptDetail/GetData{?semiId}]
+レセプトの材料明細として登録されているデータを取得するメソッド
+
++ Request
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Parameters
+    + semiId (number,required) - 半製品ID（内部キー）
+    
++ Response 200 (appication/json)
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + records (number,required) - 取得したデータ件数 レコード無しは0
+        + item (ReceiptDetails,optional) - レセプトの明細データの配列
+
+    + Body
+
+### レセプト作業明細取得　[GET /apix/ReceiptWorkDetail/GetData{?receiptId}]
+レセプトの作業明細として登録されているデータを取得するメソッド
+
++ Request
+    + Headers
+    ```
+    Authorization: Bearer {token}
+    Accept: text/plain
+    ```
+
++ Parameters
+    + receiptId (number,required) - レセプトID（内部キー）
+    
++ Response 200 (appication/json)
+
+    + Attributes
+        + status (string,required) - 成功時はSuccess、失敗時はFail
+        + records (number,required) - 取得したデータ件数 レコード無しは0
+        + item (WorkProcedureDetails,optional) - レセプトの作業明細データの配列
+
+    + Body
 
 ## 半完成品管理API [/apix/FoodSemiProduct/]
 半完成品に関わるAPIを定義します。
